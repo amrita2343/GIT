@@ -33,6 +33,8 @@ spec:
    kubectl delete svc nginx-service
 kubectl delete deployment nginx-deployment
 
+JENKINS
+
 
 docker pull jenkins/jenkins:lts
 
@@ -41,8 +43,9 @@ jenkins_home:/var/jenkins_home -v //var/run/docker.sock:/var/run/docker.sock
 jenkins/jenkins:lts
 
 
-
 docker run -d -p 8080:8080 -p 50000:50000 --name jenkins -v jenkins_home:/var/jenkins_home -v /var/run/docker.sock:/var/run/docker.sock jenkins/jenkins:lts
+
+docker ps
 
 
 MKDIR AMRITA
@@ -93,6 +96,17 @@ EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]
 
 
+Docker with kubernets
+mkdir Vishnu
+cd Vishnu
+echo .>app.py
+code .
+echo .>dockerfile
+code .
+echo .>requirements.txt
+code . 
+docker build -t Vishnu/flask-api:latest .
+
 
 GIT HUB
 
@@ -123,3 +137,110 @@ Allow users to review and rate books  	Could-Have	    Enhances user engagement b
 Integrate a chatbot for user assistance    	Should-Have	     Improves user support but can be postponed if necessary.
 Mobile app version of the system   	Should-Have	     Increases accessibility but is not immediately required.
 Multi-language support     	Could-Have	     Supports inclusivity but is not essential for launch.
+
+CI CD
+docker run -d -p 8080:8080 -p 50000:50000 --name jenkins \
+-v jenkins_home:/var/jenkins_home \
+-v /var/run/docker.sock:/var/run/docker.sock \
+jenkins/jenkins:lts
+
+docker logs jenkins
+
+APP.PY
+from flask import Flask
+app = Flask(__name__)
+
+@app.route("/")
+def home():
+    return "Hello, CI/CD with Jenkins!"
+
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=5000)
+
+DOCKERFILE
+FROM python:3.9-slim
+
+WORKDIR /app
+COPY . /app
+RUN pip install flask
+EXPOSE 5000
+CMD ["python", "app.py"]
+
+
+pipeline {
+    agent {
+        docker { image 'docker:stable' }
+    }
+    environment {
+        DOCKER_IMAGE = 'your-dockerhub-username/sample-app'
+    }
+    stages {
+        stage('Clone Repository') {
+            steps {
+                git 'https://github.com/your-repository/sample-app.git'
+            }
+        }
+        stage('Build Docker Image') {
+            steps {
+                sh 'docker build -t $DOCKER_IMAGE .'
+            }
+        }
+        stage('Run Tests') {
+            steps {
+                sh 'docker run --rm $DOCKER_IMAGE python -m unittest'
+            }
+        }
+        stage('Push to Docker Hub') {
+            steps {
+                withDockerRegistry(credentialsId: 'dockerhub-credentials') {
+                    sh 'docker push $DOCKER_IMAGE'
+                }
+            }
+        }
+        stage('Deploy to Cloud') {
+            steps {
+                sh 'kubectl apply -f deployment.yaml'
+            }
+        }
+    }
+}
+
+
+
+deployment.yaml
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sample-app
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: sample-app
+  template:
+    metadata:
+      labels:
+        app: sample-app
+    spec:
+      containers:
+      - name: sample-app
+        image: your-dockerhub-username/sample-app:latest
+        ports:
+        - containerPort: 5000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: sample-app-service
+spec:
+  selector:
+    app: sample-app
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 5000
+  type: NodePort
+
+kubectl apply -f deployment.yaml
+
