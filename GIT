@@ -1,0 +1,125 @@
+KUBERNETS
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+ name: nginx-deployment
+spec:
+ replicas: 2
+ selector:
+ matchLabels:
+ app: nginx
+ template:
+ metadata:
+ labels:
+ app: nginx
+ spec:
+ containers:
+ - name: nginx
+ image: nginx:1.21
+ ports:
+ - containerPort: 80
+ - 
+
+
+
+
+   kubectl apply -f nginx-deployment.yaml
+   kubectl get pods
+   kubectl expose deployment nginx-deployment --type=NodePort --name=nginx-service
+   kubectl get svc
+
+   kubectl scale deployment nginx-deployment --replicas=4
+   kubectl get pods
+   kubectl delete svc nginx-service
+kubectl delete deployment nginx-deployment
+
+
+docker pull jenkins/jenkins:lts
+
+docker run -d -p 8080:8080 -p 50000:50000 --name jenkins -v
+jenkins_home:/var/jenkins_home -v //var/run/docker.sock:/var/run/docker.sock
+jenkins/jenkins:lts
+
+
+
+docker run -d -p 8080:8080 -p 50000:50000 --name jenkins -v jenkins_home:/var/jenkins_home -v /var/run/docker.sock:/var/run/docker.sock jenkins/jenkins:lts
+
+
+MKDIR AMRITA
+CD AMRITA
+ECHO .>INDEX.HTML
+CODE .
+ECHO .>DOCKERFILE
+CODE .
+DOCKER BUILD -T AMRITA .
+DOCKER IMAGES
+DOCKER RUN -D -P --NAME AMRITA AMRITA
+DOCKER RUN -D -P --NAME AMRITA AMRITA
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Dockerized Website</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 50px;
+        }
+        h1 {
+            color: #2c3e50;
+        }
+    </style>
+</head>
+<body>
+    <h1>Welcome to My Dockerized Website!</h1>
+    <p>This website is served using NGINX in a Docker container.</p>
+</body>
+</html>
+
+
+# Use the official NGINX image as a base image
+FROM nginx:alpine
+
+# Copy the HTML file into the NGINX default directory
+COPY index.html /usr/share/nginx/html/
+
+# Expose port 80 to allow access to the web server
+EXPOSE 80
+
+# Start the NGINX server
+CMD ["nginx", "-g", "daemon off;"]
+
+
+
+GIT HUB
+
+GIT ADD AMM.HTML
+GIT COMMIT -M "DONE"
+GIT PUSH ORIGIN MAIN
+GIT CHECKOUT -B AMRITA
+                    GIT ADD AMRITA.PY
+GIT COMMIT -M "FINISH"
+GIT PUSH ORIGIN AMRITA
+GIT CHECKOUT MAIN
+GIT MERGE AMRITA
+GIT PUSH ORIGIN MAIN
+GIT PULL ORIGIN MAIN
+
+
+
+
+
+
+REQUIREMENT	CATEGORY	JUSTIFICATION
+Search books by title and author  Must-Have	  Core functionality for basic library operations.
+Online book reservation system	  Must-Have 	Essential for user convenience and accessibility.
+Generate monthly reports for administrators 	Must-Have   	Critical for tracking and reporting purposes.
+Support for QR code scanning	  Could-Have   	Adds convenience but not critical for the initial system.
+User-friendly dashboard for librarians   	Must-Have  	Fundamental for managing library activities efficiently.
+Allow users to review and rate books  	Could-Have	    Enhances user engagement but not a core function.
+Integrate a chatbot for user assistance    	Should-Have	     Improves user support but can be postponed if necessary.
+Mobile app version of the system   	Should-Have	     Increases accessibility but is not immediately required.
+Multi-language support     	Could-Have	     Supports inclusivity but is not essential for launch.
